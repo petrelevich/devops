@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  app:
+    build:
+      context: services/app
+      dockerfile: Dockerfile.development
+    command: /java-dir/bin/java -jar ./application-0.0.1-SNAPSHOT.jar
+    ports:
+      - "8080:8080"
+    volumes:
+      - "~/.bash_history:/.bash_history"
+      - "./services/app:/usr/src/app:cached"
+      - "/tmp:/tmp:delegated"
+      - "${JAVA_DIR}:/java-dir"
