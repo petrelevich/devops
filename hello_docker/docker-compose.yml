@@ -1,15 +1,29 @@
 version: '3.3'
 
 services:
+  nginx:
+    build:
+      context: services/nginx
+      dockerfile: Dockerfile.development
+    command: ["nginx", "-g", "daemon off;"]
+    ports:
+      - "80:80"  
+    volumes:
+      - "~/.bash_history:/.bash_history"
+      - "./services/nginx:/usr/src/nginx:cached"
+      - "/tmp:/tmp:delegated"
+    depends_on:
+      - app
   app:
     build:
       context: services/app
       dockerfile: Dockerfile.development
     command: /java-dir/bin/java -jar ./application-0.0.1-SNAPSHOT.jar
-    ports:
-      - "8080:8080"
+    expose:
+     - 8080
     volumes:
       - "~/.bash_history:/.bash_history"
       - "./services/app:/usr/src/app:cached"
       - "/tmp:/tmp:delegated"
       - "${JAVA_DIR}:/java-dir"
+
