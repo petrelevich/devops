@@ -1,0 +1,9 @@
+- hosts: all
+  vars:
+    app_port: '8080'
+    web_port: '80'
+  tasks:
+    - name: Env Template
+      template:
+        src: environment.j2
+        dest: ../.env 
