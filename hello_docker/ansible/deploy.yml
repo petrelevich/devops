@@ -1,0 +1,52 @@
+---
+- hosts: webservers
+  gather_facts: false
+  vars_prompt:
+    - name: "app_image_tag"
+      prompt: "App image tag"
+      private: false
+
+- hosts: webservers
+  gather_facts: false
+
+  tasks:
+    - name: download app image
+      docker_image:
+        name: "petrelevich/workshop-devops-app:last"
+        force: true
+
+
+    - name: run migrations
+      docker_container:
+        recreate: true
+        detach: false
+        name: app-basics-migrations
+        command: "mix ecto.migrate"
+        image: "petrelevich/workshop-devops-app:last"
+        state: started
+        volumes:
+          - "/tmp:/tmp"
+          - "/var/tmp:/var/tmp"
+      run_once: true
+      tags: [webservers]
+
+    - name: start application
+      docker_container:
+        recreate: true
+        name: app
+        image: "petrelevich/workshop-devops-app:last"
+        state: started
+        log_driver: awslogs
+        restart_policy: always
+        env:
+          MIX_ENV: prod
+          NODE_ENV: production
+        # published_ports:
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+          - "/tmp:/tmp"
+          - "/opt:/opt"
+          - "/var/tmp:/var/tmp"
+        networks:
+          - name: "app_basics_docker_network"
+      tags: [webservers]

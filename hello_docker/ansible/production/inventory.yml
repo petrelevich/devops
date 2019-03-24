@@ -1,0 +1,7 @@
+all:
+  hosts:
+    mail.example.com:
+  children:
+    webservers:
+      hosts:
+        157.230.121.239:

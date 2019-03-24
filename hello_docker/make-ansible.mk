@@ -6,3 +6,5 @@ ansible-vaults-decrypt:
 
 ansible-vaults-edit:
 	ansible-vault edit ansible/production/group_vars/all/vault.yml
+production-deploy:
+	ansible-playbook -vvvvv ansible/development.yml -i ansible/production/inventory.yml
