@@ -21,9 +21,10 @@ services:
     command: /java-dir/bin/java -jar ./application-0.0.1-SNAPSHOT.jar
     expose:
      - 8080
+    env_file: ".env"
     volumes:
       - "~/.bash_history:/.bash_history"
       - "./services/app:/usr/src/app:cached"
       - "/tmp:/tmp:delegated"
       - "${JAVA_DIR}:/java-dir"
-
+   

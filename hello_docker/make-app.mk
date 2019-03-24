@@ -14,3 +14,6 @@ nginx-bash:
 
 development-setup-env:
 	ansible-playbook ansible/development.yml -i ansible/development -vv
+
+app-setup: development-setup-env app-build
+	docker-compose run app
